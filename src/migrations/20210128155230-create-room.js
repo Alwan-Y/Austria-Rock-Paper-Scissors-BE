@@ -7,19 +7,9 @@ module.exports = {
       },
       firstPlayer: {
         type: Sequelize.STRING,
-        onDelete: 'set null',
-        references: {
-          model: 'User',
-          key: 'userName',
-        },
       },
       secondPlayer: {
         type: Sequelize.STRING,
-        onDelete: 'set null',
-        references: {
-          model: 'User',
-          key: 'userName',
-        },
       },
       firstPlayerChoice: {
         type: Sequelize.STRING,
