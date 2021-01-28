@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "airbnb"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "node": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "src"
+        ]
+      }
+    },
+    "react": {
+      "version": "999.999.999"
+    }
+  },
+  "rules": {
+    "global-require": 0,
+    "import/no-dynamic-require": 0,
+    "no-console": 0,
+    "no-unused-vars": 0,
+    "semi": 0,
+    "no-undef": 0,
+    "no-alert": 0
+  }
+}
