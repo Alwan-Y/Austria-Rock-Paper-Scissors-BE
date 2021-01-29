@@ -3,21 +3,14 @@ module.exports = {
     await queryInterface.createTable('Room', {
       id: {
         type: Sequelize.UUID,
+        allowNull: false,
         primaryKey: true,
+        unique: true,
       },
-      firstPlayer: {
+      playerOneUsername: {
         type: Sequelize.STRING,
       },
-      secondPlayer: {
-        type: Sequelize.STRING,
-      },
-      firstPlayerChoice: {
-        type: Sequelize.STRING,
-      },
-      secondPlayerChoice: {
-        type: Sequelize.STRING,
-      },
-      result: {
+      playerTwoUsername: {
         type: Sequelize.STRING,
       },
     })
