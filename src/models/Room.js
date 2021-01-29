@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       const { History } = models
 
-      Room.hasMany(History, { foreignKey: 'id' })
+      Room.hasMany(History, { foreignKey: 'roomId' })
     }
   }
 
@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    firstPlayerUsername: {
+    playerOneUsername: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    secondPlayerUsername: {
+    playerTwoUsername: {
       type: DataTypes.STRING,
     },
   }, {
