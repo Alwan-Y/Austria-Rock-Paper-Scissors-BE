@@ -1,31 +1,36 @@
 import { Model } from 'sequelize'
 
 module.exports = (sequelize, DataTypes) => {
-  class Room extends Model {
+  class History extends Model {
     static associate(models) {
-      const { History } = models
+      const { Room } = models
 
-      Room.hasMany(History, { foreignKey: 'id' })
+      History.belongsTo(Room, { foreignKey: 'id' })
     }
   }
 
-  Room.init({
+  History.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    firstPlayerUsername: {
+    playerOneChoice: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
-    secondPlayerUsername: {
+    playerTwoChoice: {
       type: DataTypes.STRING,
+    },
+    result: {
+      type: DataTypes.STRING,
+    },
+    roomId: {
+      type: DataTypes.UUID,
     },
   }, {
     sequelize,
-    modelName: 'Room',
+    modelName: 'History',
   })
 
-  return Room;
+  return History;
 }

@@ -1,31 +1,29 @@
 import { Model } from 'sequelize'
 
 module.exports = (sequelize, DataTypes) => {
-  class Room extends Model {
+  class Feedback extends Model {
     static associate(models) {
-      const { History } = models
-
-      Room.hasMany(History, { foreignKey: 'id' })
     }
   }
 
-  Room.init({
+  Feedback.init({
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    firstPlayerUsername: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    secondPlayerUsername: {
+    feedback: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
   }, {
     sequelize,
-    modelName: 'Room',
+    modelName: 'Feedback',
   })
 
-  return Room;
+  return Feedback;
 }
