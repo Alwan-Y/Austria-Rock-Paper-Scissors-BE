@@ -1,5 +1,6 @@
 import express from 'express'
 import cors from 'cors'
+import apis from './routes/apis'
 
 require('dotenv').config()
 
@@ -7,7 +8,7 @@ const app = express()
 app.use(express.json())
 app.use(cors())
 
-// app.use('/apis', apis)
+app.use('/apis', apis)
 
 app.get('*', (req, res) => res.status(404).send('404 Not Found'))
 
