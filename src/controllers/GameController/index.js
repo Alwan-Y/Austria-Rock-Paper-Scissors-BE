@@ -9,7 +9,9 @@ class GameController {
       {
         include: [{
           model: History,
-          attributes: ['playerOneChoice', 'playerTwoChoice', 'result'],
+          attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+          order: [['round', 'DESC']],
+          limit: 1,
         }],
         where: { id: roomId },
       },
@@ -18,6 +20,96 @@ class GameController {
         if (!room) return res.status(400).json({ message: 'game does not exist' })
 
         return res.status(200).json({ room })
+      },
+    ).catch(
+      (e) => {
+        console.log(e)
+        return res.status(500).json({ message: 'Internal Server Error' })
+      },
+    )
+  }
+
+  static create = (req, res) => {
+    /**
+     * @todo:
+     * 1. validate latest game was finished
+     * 2. validate creator is room's member
+     * 3. validate room's member is full
+     * 4. validate latest round was finished
+     * 5. return created game round
+     * 6. Need to decouple this long logic
+     */
+
+    const { roomId } = req.params
+    const { username } = req.body
+
+    return Room.findOne(
+      {
+        where: { id: roomId },
+      },
+    ).then(
+      (room) => {
+        if (!room) return res.status(400).json({ message: 'game does not exist' })
+
+        const { playerOneUsername, playerTwoUsername } = room
+
+        if (!(playerOneUsername && playerTwoUsername)) {
+          return res.status(400).json({ message: 'Please find other player to go to next round' })
+        }
+
+        if (![playerTwoUsername, playerOneUsername].includes(username)) {
+          return res.status(400).json({ message: 'game can only be played by room\'s member' })
+        }
+
+        return History.findOne(
+          {
+            where: { roomId },
+            order: [['round', 'DESC']],
+            limit: 1,
+          },
+        ).then(
+          (ltsHistory) => {
+            const { result: gameResult, round } = ltsHistory
+
+            if (!gameResult) return res.status(400).json({ message: 'Please finish current round to go to next round' })
+
+            return History.create(
+              { round: (round + 1), roomId },
+            ).then(
+              (history) => {
+                console.log(history)
+                return Room.findOne(
+                  {
+                    include: [{
+                      model: History,
+                      attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+                      order: [['round', 'DESC']],
+                      limit: 1,
+                    }],
+                    where: { id: roomId },
+                  },
+                ).then(
+                  (result) => res.status(200).json({ room: result }),
+                ).catch(
+                  (e) => {
+                    console.log(e)
+                    return res.status(500).json({ message: 'Internal Server Error' })
+                  },
+                )
+              },
+            ).catch(
+              (e) => {
+                console.log(e)
+                return res.status(500).json({ message: 'Internal Server Error' })
+              },
+            )
+          },
+        ).catch(
+          (e) => {
+            console.log(e)
+            return res.status(500).json({ message: 'Internal Server Error' })
+          },
+        )
       },
     ).catch(
       (e) => {
