@@ -7,6 +7,10 @@ module.exports = {
         unique: true,
         primaryKey: true,
       },
+      round: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       playerOneChoice: {
         type: Sequelize.STRING,
       },

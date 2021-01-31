@@ -1,8 +1,11 @@
-import express from 'express';
+import express from 'express'
+import GameController from '../../controllers/GameController'
 import LeaderboardController from '../../controllers/LeaderboardController'
 
-const apiRoutes = express.Router();
+const router = express.Router()
 
-apiRoutes.get('/leaderboard', LeaderboardController.getLeaderboardRank);
+router.get('/leaderboard', LeaderboardController.getLeaderboardRank);
+router.get('/games/:roomId', GameController.get)
+router.post('/games/:roomId', GameController.create)
 
-export default apiRoutes;
+export default router
