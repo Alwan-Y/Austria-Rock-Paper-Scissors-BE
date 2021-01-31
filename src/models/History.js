@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
+    round: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     playerOneChoice: {
       type: DataTypes.STRING,
     },
