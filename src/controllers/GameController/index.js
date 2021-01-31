@@ -118,6 +118,87 @@ class GameController {
       },
     )
   }
+
+  static play = async (req, res) => {
+    const tran = await sequelize.transaction()
+
+    try {
+      const { roomId } = req.params
+      const { username, choice } = req.body
+
+      const room = await Room.findOne(
+        {
+          where: { id: roomId },
+        },
+      )
+
+      const history = await History.findOne(
+        {
+          where: { roomId },
+          order: [['round', 'DESC']],
+          limit: 1,
+        },
+      )
+
+      const { playerOneUsername, playerTwoUsername } = room
+      const { playerOneChoice, playerTwoChoice, id } = history
+
+      const playedRoom = {
+        playerOneUsername, playerTwoUsername, playerOneChoice, playerTwoChoice,
+      }
+
+      return GameService.validatePlayer(playedRoom, username, choice)
+        .then(async (player) => {
+          let playerChoiceToSet = { playerOneChoice: choice }
+
+          if (player === 'secondPlayer') {
+            playerChoiceToSet = { playerTwoChoice: choice }
+          }
+
+          return History.update(
+            playerChoiceToSet,
+            {
+              where: { id }, returning: true, plain: true, transaction: tran,
+            },
+          ).then(async (updatedGame) => {
+            const result = await GameService.getResult(
+              {
+                playerOneUsername,
+                playerTwoUsername,
+                playerOneChoice: updatedGame[1].dataValues.playerOneChoice,
+                playerTwoChoice: updatedGame[1].dataValues.playerTwoChoice,
+              },
+            )
+
+            const gameResult = await History.update(
+              { result },
+              {
+                where: { id }, returning: true, plain: true, transaction: tran,
+              },
+            )
+
+            res.status(200).json(
+              { room: { ...room.dataValues, Histories: gameResult[1].dataValues } },
+            )
+
+            return tran.commit();
+          }).catch(async (e) => {
+            console.log(e);
+            await tran.rollback();
+            return res.status(500).json({ message: 'Internal Server Error' })
+          })
+        })
+        .catch(async (e) => {
+          console.log(e)
+          await tran.rollback();
+          return res.status(400).json({ message: e })
+        })
+    } catch (e) {
+      console.log(e)
+      await tran.rollback();
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
 }
 
 export default GameController
