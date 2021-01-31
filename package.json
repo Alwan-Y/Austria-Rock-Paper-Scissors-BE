@@ -13,7 +13,8 @@
     "sequelize": "sequelize",
     "db:migrate": "sequelize db:migrate",
     "db:seed:all": "sequelize db:seed:all",
-    "db:migrate:refresh": "sequelize db:migrate:undo:all && yarn db:migrate"
+    "db:migrate:refresh": "sequelize db:migrate:undo:all && yarn db:migrate",
+    "db:refresh:all": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
   },
   "author": "Austria",
   "license": "ISC",
