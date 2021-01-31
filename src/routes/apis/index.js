@@ -1,9 +1,12 @@
 import express from 'express'
+import Middleware from '../../middlewares'
 import GameController from '../../controllers/GameController'
+import GameValidator from '../../validators/GameValidator'
 
 const router = express.Router()
 
-router.get('/games/:roomId', GameController.get)
-router.post('/games/:roomId', GameController.create)
+router.get('/games/:roomId', [GameValidator.get, Middleware.validate], GameController.get)
+router.post('/games/:roomId', [GameValidator.create, Middleware.validate], GameController.create)
+router.patch('/games/:roomId', [GameValidator.play, Middleware.validate], GameController.play)
 
 export default router
