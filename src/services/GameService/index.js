@@ -25,25 +25,25 @@ class GameService {
     return `${sPlayer} WIN`
   }
 
-  static validatePlayer = async (room, userName, choice) => {
+  static validatePlayer = async (room, username, choice) => {
     if (!Object.keys(this.RULES).includes(choice)) {
       throw Error('Choice does not exists').message
     }
 
     const {
-      playerOneUsername, playerTwoUsername, histories,
+      playerOneUsername, playerTwoUsername, playerOneChoice, playerTwoChoice,
     } = room
 
-    if (firstPlayer === userName) {
-      if (!firstPlayerChoice) {
+    if (playerOneUsername === username) {
+      if (!playerOneChoice) {
         return 'firstPlayer'
       }
 
       throw Error('You cannot choose other choice again').message
     }
 
-    if (secondPlayer === userName) {
-      if (!secondPlayerChoice) {
+    if (playerTwoUsername === username) {
+      if (!playerTwoChoice) {
         return 'secondPlayer'
       }
 
@@ -53,18 +53,20 @@ class GameService {
     throw Error('You are not player in this room').message
   }
 
-  static getResult = async (room) => {
+  static getResult = async (game) => {
     const {
-      firstPlayer, secondPlayer, firstPlayerChoice, secondPlayerChoice,
-    } = room
+      playerOneUsername, playerTwoUsername, playerOneChoice, playerTwoChoice,
+    } = game
 
-    if (firstPlayerChoice && secondPlayerChoice) {
-      const result = this.decide(firstPlayer, secondPlayer, firstPlayerChoice, secondPlayerChoice)
+    if (playerOneChoice && playerTwoChoice) {
+      const result = this.decide(
+        playerOneUsername, playerTwoUsername, playerOneChoice, playerTwoChoice,
+      )
 
       return result
     }
 
-    return 'waiting other player to play'
+    return null
   }
 }
 
