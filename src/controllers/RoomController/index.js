@@ -1,93 +1,86 @@
-import { Room } from '../../models'
+import { Room, History } from '../../models'
 
 class RoomController {
   static create = (req, res) => {
-    const { roomId } = req.body
-    const { userId } = req.param 
+    const { username } = req.body
 
-    Room.findOne({
-      where: { roomId },
-    }).then(
-      (room) => {
-        if (room) {
-          return res.status(400).json({ status: 400, message: 'Room already exist' })
-        }
+    return Room.create({ playerOneUsername: username })
+      .then(
+        (data) => {
+          const roomId = data.dataValues.id
+          return History.create({ roomId, round: 1 })
+            .then(
+              (history) => Room.findOne(
+                {
+                  include: [{
+                    model: History,
+                    attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+                    order: [['round', 'DESC']],
+                    limit: 1,
+                  }],
+                  where: { id: roomId },
+                },
+              ).then(
+                (room) => {
+                  if (!room) return res.status(400).json({ message: 'game does not exist' })
 
-        return Room.create({
-          roomName,
-          firstPlayer: userId,
-          status: 'waiting for player 2',
-        }).then(
-          (data) => res.status(201).json({ ...data.dataValues }),
-        ).catch(
-          (e) => {
-            console.log(e)
-            res.status(500).json({ message: e })
-          },
-        )
-      },
-    ).catch(
-      (e) => {
-        console.log(e)
-        res.status(500).json(e)
-      },
-    )
+                  return res.status(200).json({ room })
+                },
+              ).catch(
+                (e) => {
+                  console.log(e)
+                  return res.status(500).json({ message: 'Internal Server Error' })
+                },
+              ),
+            )
+        },
+      ).catch(
+        (e) => {
+          console.log(e)
+          res.status(500).json({ message: e })
+        },
+      )
   }
 
-  static update = (req, res) => {
+  static join = (req, res) => {
     const { roomId } = req.params
+    const { username } = req.body
 
-    return Room.findOne({
-      where: { roomId },
-    }).then(
-      (room) => {
-        if (!room) return res.status(404).json({ message: 'Not found' })
+    return Room.findOne({ where: { roomId } })
+      .then(
+        (room) => {
+          if (!room) return res.status(404).json({ message: 'Not found' })
 
-        const {
-          firstPlayer,
-          secondPlayer,
-          firstPlayerChoice,
-          secondPlayerChoice,
-          result,
-        } = req.body
+          return room.update({ playerTwoUsername: username })
+            .then(
+              (updated) => Room.findOne(
+                {
+                  include: [{
+                    model: History,
+                    attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+                    order: [['round', 'DESC']],
+                    limit: 1,
+                  }],
+                  where: { id: roomId },
+                },
+              ).then(
+                (room) => {
+                  if (!room) return res.status(400).json({ message: 'game does not exist' })
 
-        return room.update(
-          {
-            firstPlayer,
-            secondPlayer,
-            firstPlayerChoice,
-            secondPlayerChoice,
-            result,
-          },
-        ).then(
-          (updated) => res.status(200).json({ ...updated.dataValues }),
-        )
-      },
-    ).catch(
-      (e) => {
-        console.log(e)
-        res.status(500).json({ message: e })
-      },
-    )
-  }
-
-  static delete = (req, res) => {
-    const { roomId } = req.params
-
-    return Room.destroy({
-      where: { roomId },
-    }).then(
-      (room) => {
-        if (!room) return res.status(404).json({ message: 'Not found' })
-
-        return res.status(200).json({ message: 'Deleted' })
-      },
-    ).catch(
-      (e) => {
-        console.log(e)
-        res.status(500).json({ message: e })
-      },
-    )
+                  return res.status(200).json({ room })
+                },
+              ).catch(
+                (e) => {
+                  console.log(e)
+                  return res.status(500).json({ message: 'Internal Server Error' })
+                },
+              ),
+      ).catch(
+        (e) => {
+          console.log(e)
+          return res.status(500).json({ message: e })
+        },
+      )
   }
 }
 

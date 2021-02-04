@@ -8,8 +8,7 @@ const router = express.Router()
 router.get('/games/:roomId', GameController.get)
 router.post('/games/:roomId', GameController.create)
 
-router.post('/', [RoomValidator.create, Middleware.Auth], RoomController.create)
-router.patch('/:roomName', Middleware.Auth, RoomController.update)
-router.delete('/:roomName', Middleware.Auth, RoomController.delete)
+router.post('/room', RoomController.create)
+router.patch('/:roomId', RoomController.create)
 
 export default router
