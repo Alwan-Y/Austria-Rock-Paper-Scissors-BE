@@ -12,6 +12,6 @@ router.post('/games/:roomId', [GameValidator.create, Middleware.validate], GameC
 router.patch('/games/:roomId', [GameValidator.play, Middleware.validate], GameController.play)
 
 router.post('/rooms', [RoomValidator.create, Middleware.validate], RoomController.create)
-router.patch('rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomController.join)
+router.patch('/rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomController.join)
 
 export default router
