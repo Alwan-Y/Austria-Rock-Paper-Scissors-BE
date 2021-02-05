@@ -2,6 +2,8 @@ import express from 'express'
 import Middleware from '../../middlewares'
 import GameController from '../../controllers/GameController'
 import GameValidator from '../../validators/GameValidator'
+import RoomController from '../../controllers/RoomController'
+import RoomValidator from '../../validators/RoomValidator'
 
 const router = express.Router()
 
