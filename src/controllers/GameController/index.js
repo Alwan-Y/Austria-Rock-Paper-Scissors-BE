@@ -19,6 +19,8 @@ class GameController {
       (room) => {
         if (!room) return res.status(400).json({ message: 'game does not exist' })
 
+        req.app.get('RealtimeService').broadcast('oke', { room }, 'room1')
+
         return res.status(200).json({ room })
       },
     ).catch(
