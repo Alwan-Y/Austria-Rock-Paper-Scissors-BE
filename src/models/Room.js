@@ -6,6 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       const { History } = models
 
       Room.hasMany(History, { foreignKey: 'roomId' })
+      Room.hasMany(History, { foreignKey: 'playerOne' })
+      Room.hasMany(History, { foreignKey: 'playerTwo' })
     }
   }
 

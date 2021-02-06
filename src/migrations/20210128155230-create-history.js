@@ -11,12 +11,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      playerOneUsername: {
+      playerOne: {
         type: Sequelize.STRING,
         allowNull: false,
         onDelete: 'set null',
       },
-      playerTwoUsername: {
+      playerTwo: {
         type: Sequelize.STRING,
         allowNull: true,
         onDelete: 'set null',
