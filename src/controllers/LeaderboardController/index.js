@@ -18,7 +18,7 @@ class LeaderboardController {
       order: [
         [[sequelize.col('n_results'), 'DESC']],
       ],
-      limit: 1,
+      limit: 10,
     })
       .then((data) => {
         const username = data[0].dataValues.result.split(' ')[0];
