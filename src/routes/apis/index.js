@@ -6,6 +6,8 @@ import LeaderboardController from '../../controllers/LeaderboardController'
 import FeedbackController from '../../controllers/FeedbackController'
 import RoomController from '../../controllers/RoomController'
 import RoomValidator from '../../validators/RoomValidator'
+import StatisticController from '../../controllers/StatisticController'
+import StatisticValidator from '../../validators/StatisticValidator'
 
 const router = express.Router()
 
@@ -20,5 +22,7 @@ router.post('/feedback', FeedbackController.postFeedback)
 
 router.post('/rooms', [RoomValidator.create, Middleware.validate], RoomController.create)
 router.patch('/rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomController.join)
+
+router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate], StatisticController.get)
 
 export default router
