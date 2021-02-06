@@ -11,23 +11,15 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      playerOne: {
+      playerOneUsername: {
         type: Sequelize.STRING,
         allowNull: false,
         onDelete: 'set null',
-        references: {
-          model: 'Room',
-          key: 'playerOneUsername',
-        },
       },
-      playerTwo: {
+      playerTwoUsername: {
         type: Sequelize.STRING,
         allowNull: true,
         onDelete: 'set null',
-        references: {
-          model: 'Room',
-          key: 'playerTwoUsername',
-        },
       },
       playerOneChoice: {
         type: Sequelize.STRING,

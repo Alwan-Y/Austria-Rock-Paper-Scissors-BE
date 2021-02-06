@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    playerOne: {
+    playerOneUsername: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    playerTwo: {
+    playerTwoUsername: {
       type: DataTypes.STRING,
     },
     playerOneChoice: {
