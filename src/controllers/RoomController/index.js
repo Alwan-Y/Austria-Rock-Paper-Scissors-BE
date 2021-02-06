@@ -50,36 +50,43 @@ class RoomController {
       return Room.findOne({ where: { id: roomId } })
         .then(
           (room) => {
-            if (!room) return res.status(404).json({ message: 'Not found' })
+            if (!room) return res.status(404).json({ message: 'Not Found' })
 
-            return room.update({ playerTwoUsername: username })
+            return Room.findOne({ where: [{ id: roomId }, { playerTwoUsername: null }] })
               .then(
-                (updated) => Room.findOne(
-                  {
-                    include: [{
-                      model: History,
-                      attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
-                      order: [['round', 'DESC']],
-                      limit: 1,
-                    }],
-                    where: { id: roomId },
-                  },
-                ).then(
-                  (room) => {
-                    if (!room) return res.status(400).json({ message: 'games does not exist' })
+                (room) => {
+                  if (room) return res.status(400).json({ message: 'Room is full' })
 
-                    return res.status(200).json({ room })
-                  },
-                ).catch(
-                  (e) => {
-                    console.log(e)
-                    return res.status(500).json({ message: 'Internal Server Error' })
-                  },
-                ),
-              ).catch(
-                (e) => {
-                  console.log(e)
-                  return res.status(500).json({ message: e })
+                  return room.update({ playerTwoUsername: username })
+                    .then(
+                      (updated) => Room.findOne(
+                        {
+                          include: [{
+                            model: History,
+                            attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+                            order: [['round', 'DESC']],
+                            limit: 1,
+                          }],
+                          where: { id: roomId },
+                        },
+                      ).then(
+                        (room) => {
+                          if (!room) return res.status(400).json({ message: 'games does not exist' })
+
+                          return res.status(200).json({ room })
+                        },
+                      ).catch(
+                        (e) => {
+                          console.log(e)
+                          return res.status(500).json({ message: 'Internal Server Error' })
+                        },
+                      ),
+                    ).catch(
+                      (e) => {
+                        console.log(e)
+                        return res.status(500).json({ message: e })
+                      },
+                    )
                 },
               )
           },
