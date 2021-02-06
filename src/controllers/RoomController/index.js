@@ -47,12 +47,12 @@ class RoomController {
       const { roomId } = req.params
       const { username } = req.body
 
-      return Room.findOne({ where: { roomId } })
+      return Room.findOne({ where: { id: roomId } })
         .then(
           (room) => {
             if (!room) return res.status(404).json({ message: 'Not found' })
 
-            return room.update({ playerOneUsername: username })
+            return room.update({ playerTwoUsername: username })
               .then(
                 (updated) => Room.findOne(
                   {
