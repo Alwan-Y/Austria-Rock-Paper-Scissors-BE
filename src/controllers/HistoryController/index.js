@@ -25,8 +25,8 @@ class HistoryController {
     const { id } = req.params
 
     return History.destroy({ where: { id } })
-      .then((user) => {
-        if (user) return res.status(200).json({ message: 'History successfully deleted' })
+      .then((history) => {
+        if (history) return res.status(200).json({ message: 'History successfully deleted' })
 
         return res.status(404).json({ message: 'History not found' })
       })
