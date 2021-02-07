@@ -19,7 +19,7 @@ class GameController {
       (room) => {
         if (!room) return res.status(400).json({ message: 'game does not exist' })
 
-        req.app.get('RealtimeService').broadcast('oke', { room }, 'room1')
+        req.app.get('RealtimeService').broadcast('game', { room }, roomId)
 
         return res.status(200).json({ room })
       },
@@ -32,16 +32,6 @@ class GameController {
   }
 
   static create = (req, res) => {
-    /**
-     * @todo:
-     * 1. validate latest game was finished
-     * 2. validate creator is room's member
-     * 3. validate room's member is full
-     * 4. validate latest round was finished
-     * 5. return created game round
-     * 6. Need to decouple this long logic
-     */
-
     const { roomId } = req.params
     const { username } = req.body
 
@@ -179,9 +169,11 @@ class GameController {
               },
             )
 
-            res.status(200).json(
-              { room: { ...room.dataValues, Histories: gameResult[1].dataValues } },
-            )
+            const game = { ...room.dataValues, Histories: gameResult[1].dataValues }
+
+            req.app.get('RealtimeService').broadcast('game', { room: game }, roomId)
+
+            res.status(200).json({ room: game })
 
             return tran.commit();
           }).catch(async (e) => {

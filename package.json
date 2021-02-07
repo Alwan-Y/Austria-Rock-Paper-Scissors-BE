@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon src --exec babel-node",
-    "start": "node src --exec babel-node",
+    "clean": "rm -rf build && mkdir build",
+    "build-babel": "babel -d ./build ./src -s",
+    "build": "yarn clean && yarn build-babel",
+    "start": "yarn build && node ./build",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "lint:public:fix": "eslint public/ --fix",

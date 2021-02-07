@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       const { Room } = models
 
-      History.belongsTo(Room, { foreignKey: 'id' })
+      History.belongsTo(Room, { foreignKey: 'roomId' })
     }
   }
 

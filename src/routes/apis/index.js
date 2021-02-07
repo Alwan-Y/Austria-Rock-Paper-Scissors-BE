@@ -8,6 +8,8 @@ import RoomController from '../../controllers/RoomController'
 import RoomValidator from '../../validators/RoomValidator'
 import HistoryValidator from '../../validators/HistoryValidator'
 import HistoryController from '../../controllers/HistoryController'
+import StatisticController from '../../controllers/StatisticController'
+import StatisticValidator from '../../validators/StatisticValidator'
 
 const router = express.Router()
 
@@ -26,5 +28,6 @@ router.patch('/rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomCo
 router.get('/history', HistoryController.get)
 router.get('/history/historyId', [HistoryValidator.get, Middleware.validate], HistoryController.getById)
 router.delete('/history/:historyId', [HistoryValidator.delete, Middleware.validate], HistoryController.delete)
+router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate], StatisticController.get)
 
 export default router

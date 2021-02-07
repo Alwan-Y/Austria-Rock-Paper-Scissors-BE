@@ -3,11 +3,18 @@ import socketIo from 'socket.io'
 class RealtimeService {
   constructor(server, config = {}) {
     this.io = socketIo(server, config)
+
     this.io.on('connection', (socket) => {
-      console.log('a new user connected')
       socket.on('room', (roomId) => {
-        console.log(`Join room ${roomId}`)
         socket.join(roomId)
+      })
+
+      socket.on('chat', (body) => {
+        const { message, roomId } = body
+
+        if (message && roomId) {
+          socket.broadcast.to(roomId).emit('chat', message)
+        }
       })
     })
   }
