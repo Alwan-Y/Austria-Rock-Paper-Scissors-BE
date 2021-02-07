@@ -1,24 +1,51 @@
-import { History } from '../../models'
+import { History, Room } from '../../models'
 
 class HistoryController {
-  static get = (req, res) => History.findAll()
-    .then((histories) => res.status(200).json(histories))
-    .catch((e) => {
+  static get = (req, res) => {
+    History.findAll(
+      {
+        include: [{
+          model: Room,
+          attributes: ['playerOneUsername', 'playerTwoUsername'],
+          order: [['round', 'DESC']],
+        }],
+      },
+    ).then(
+      (histories) => {
+        if (!histories) return res.status(404).json({ message: 'let\'s play a game first' })
+
+        return res.status(200).json(histories)
+      },
+    ).catch((e) => {
       console.log(e)
 
       return res.status(500).json({ message: 'Internal server error' })
     })
+  }
 
   static getById = (req, res) => {
-    const { id } = req.params
+    const { historyId } = req.params
 
-    History.findOne({ where: { id } })
-      .then((history) => res.status(200).json(history))
-      .catch((e) => {
-        console.log(e)
+    return History.findOne(
+      {
+        include: [{
+          model: Room,
+          attributes: ['playerOneUsername', 'playerTwoUsername'],
+          order: [['round', 'DESC']],
+        }],
+        where: { id: historyId },
+      },
+    ).then(
+      (histories) => {
+        if (!histories) return res.status(404).json({ message: 'let\'s play a game first' })
 
-        return res.status(500).json({ message: 'Internal server error' })
-      })
+        return res.status(200).json(histories)
+      },
+    ).catch((e) => {
+      console.log(e)
+
+      return res.status(500).json({ message: 'Internal server error' })
+    })
   }
 
   static delete = (req, res) => {

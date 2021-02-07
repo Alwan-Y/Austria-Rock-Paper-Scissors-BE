@@ -23,6 +23,8 @@ router.post('/feedback', FeedbackController.postFeedback)
 router.post('/rooms', [RoomValidator.create, Middleware.validate], RoomController.create)
 router.patch('/rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomController.join)
 
-router.delete('history/:id', [HistoryValidator.delete, Middleware.validate], HistoryController.delete)
+router.get('/history', HistoryController.get)
+router.get('/history/historyId', [HistoryValidator.get, Middleware.validate], HistoryController.getById)
+router.delete('/history/:historyId', [HistoryValidator.delete, Middleware.validate], HistoryController.delete)
 
 export default router

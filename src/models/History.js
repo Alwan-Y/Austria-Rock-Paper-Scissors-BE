@@ -6,8 +6,6 @@ module.exports = (sequelize, DataTypes) => {
       const { Room } = models
 
       History.belongsTo(Room, { foreignKey: 'id' })
-      History.belongsTo(Room, { foreignKey: 'playerOneUsername', as: 'playerOne' })
-      History.belongsTo(Room, { foreignKey: 'playerTwoUsername', as: 'playerTwo' })
     }
   }
 
@@ -20,13 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     round: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    playerOne: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    playerTwo: {
-      type: DataTypes.STRING,
     },
     playerOneChoice: {
       type: DataTypes.STRING,

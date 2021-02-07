@@ -1,7 +1,9 @@
 import { param } from 'express-validator'
 
 class HistoryValidator {
-  static delete = param('id').exists().isUUID()
+  static get = param('historyId').exists().isUUID()
+
+  static delete = param('historyId').exists().isUUID()
 }
 
 export default HistoryValidator
