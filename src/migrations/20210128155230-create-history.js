@@ -11,16 +11,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      playerOne: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        onDelete: 'set null',
-      },
-      playerTwo: {
-        type: Sequelize.STRING,
-        allowNull: true,
-        onDelete: 'set null',
-      },
       playerOneChoice: {
         type: Sequelize.STRING,
       },

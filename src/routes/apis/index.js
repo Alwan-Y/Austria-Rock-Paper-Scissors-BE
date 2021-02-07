@@ -26,7 +26,7 @@ router.post('/rooms', [RoomValidator.create, Middleware.validate], RoomControlle
 router.patch('/rooms/:roomId', [RoomValidator.join, Middleware.validate], RoomController.join)
 
 router.get('/history', HistoryController.get)
-router.get('/history/historyId', [HistoryValidator.get, Middleware.validate], HistoryController.getById)
+router.get('/history/:historyId', [HistoryValidator.get, Middleware.validate], HistoryController.getById)
 router.delete('/history/:historyId', [HistoryValidator.delete, Middleware.validate], HistoryController.delete)
 router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate], StatisticController.get)
 

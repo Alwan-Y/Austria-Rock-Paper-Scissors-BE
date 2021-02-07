@@ -4,8 +4,6 @@ module.exports = {
       {
         id: '5041f349-ef85-4078-856d-d821fca998ed',
         round: 1,
-        playerOne: 'alpha',
-        playerTwo: 'beta',
         playerOneChoice: 'rock',
         playerTwoChoice: 'paper',
         result: 'beta Win',
@@ -14,8 +12,6 @@ module.exports = {
       {
         id: '8c8ba6db-f07b-4b51-94b0-e7a3dd119a5a',
         round: 2,
-        playerOne: 'alpha',
-        playerTwo: 'charlie',
         playerOneChoice: 'rock',
         playerTwoChoice: 'paper',
         result: 'charlie Win',
@@ -24,8 +20,6 @@ module.exports = {
       {
         id: 'f902d5ad-bee4-4975-8799-f7ecbd4ab98c',
         round: 3,
-        playerOne: 'charlie',
-        playerTwo: 'beta',
         playerOneChoice: 'rock',
         playerTwoChoice: 'rock',
         result: 'DRAW',
