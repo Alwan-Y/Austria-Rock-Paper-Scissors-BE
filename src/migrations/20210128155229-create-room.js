@@ -9,6 +9,7 @@ module.exports = {
       },
       playerOneUsername: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       playerTwoUsername: {
         type: Sequelize.STRING,
