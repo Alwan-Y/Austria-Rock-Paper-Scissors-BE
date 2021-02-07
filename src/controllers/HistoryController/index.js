@@ -49,9 +49,9 @@ class HistoryController {
   }
 
   static delete = (req, res) => {
-    const { id } = req.params
+    const { historyId } = req.params
 
-    return History.destroy({ where: { id } })
+    return History.destroy({ where: { id: historyId } })
       .then((history) => {
         if (history) return res.status(200).json({ message: 'History successfully deleted' })
 
