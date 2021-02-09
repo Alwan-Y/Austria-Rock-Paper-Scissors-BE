@@ -10,6 +10,7 @@ import HistoryValidator from '../../validators/HistoryValidator'
 import HistoryController from '../../controllers/HistoryController'
 import StatisticController from '../../controllers/StatisticController'
 import StatisticValidator from '../../validators/StatisticValidator'
+import UserController from '../../controllers/userController'
 
 const router = express.Router()
 
@@ -29,5 +30,7 @@ router.get('/history', HistoryController.get)
 router.get('/history/:historyId', [HistoryValidator.get, Middleware.validate], HistoryController.getById)
 router.delete('/history/:historyId', [HistoryValidator.delete, Middleware.validate], HistoryController.delete)
 router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate], StatisticController.get)
+
+router.post('/user', UserController.createUser)
 
 export default router
