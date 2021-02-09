@@ -32,5 +32,7 @@ router.delete('/history/:historyId', [HistoryValidator.delete, Middleware.valida
 router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate], StatisticController.get)
 
 router.post('/user', UserController.createUser)
+router.post('/update-user', UserController.setUserToAdmin)
+router.post('/get-status', UserController.getStatusUser)
 
 export default router
