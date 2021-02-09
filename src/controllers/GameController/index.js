@@ -112,7 +112,7 @@ class GameController {
   }
 
   static play = async (req, res) => {
-    const tran = await sequelize.transaction()
+    const transaction = await sequelize.transaction()
 
     try {
       const { roomId } = req.params
@@ -150,7 +150,7 @@ class GameController {
           return History.update(
             playerChoiceToSet,
             {
-              where: { id }, returning: true, plain: true, transaction: tran,
+              where: { id }, returning: true, plain: true, transaction,
             },
           ).then(async (updatedGame) => {
             const result = await GameService.getResult(
@@ -165,7 +165,7 @@ class GameController {
             const gameResult = await History.update(
               { result },
               {
-                where: { id }, returning: true, plain: true, transaction: tran,
+                where: { id }, returning: true, plain: true, transaction,
               },
             )
 
@@ -175,21 +175,21 @@ class GameController {
 
             res.status(200).json({ room: game })
 
-            return tran.commit();
+            return transaction.commit();
           }).catch(async (e) => {
             console.log(e);
-            await tran.rollback();
+            await transaction.rollback();
             return res.status(500).json({ message: 'Internal Server Error' })
           })
         })
         .catch(async (e) => {
           console.log(e)
-          await tran.rollback();
+          await transaction.rollback();
           return res.status(400).json({ message: e })
         })
     } catch (e) {
       console.log(e)
-      await tran.rollback();
+      await transaction.rollback();
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }

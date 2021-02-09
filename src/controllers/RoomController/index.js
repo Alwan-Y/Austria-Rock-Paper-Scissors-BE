@@ -1,45 +1,62 @@
-import { Room, History } from '../../models'
+import { Room, History, sequelize } from '../../models'
 
 class RoomController {
-    static create = (req, res) => {
+    static create = async (req, res) => {
       const { username } = req.body
 
-      return Room.create({ playerOneUsername: username })
-        .then(
-          (data) => {
-            const roomId = data.dataValues.id
-            return History.create({ roomId, round: 1 })
-              .then(
-                (history) => Room.findOne(
-                  {
-                    include: [{
-                      model: History,
-                      attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
-                      order: [['round', 'DESC']],
-                      limit: 1,
-                    }],
-                    where: { id: roomId },
-                  },
-                ).then(
-                  (room) => {
-                    if (!room) return res.status(400).json({ message: 'game does not exist' })
+      const transaction = await sequelize.transaction()
 
-                    return res.status(200).json({ room })
-                  },
-                ).catch(
-                  (e) => {
-                    console.log(e)
-                    return res.status(500).json({ message: 'Internal Server Error' })
-                  },
-                ),
-              )
-          },
-        ).catch(
-          (e) => {
-            console.log(e)
-            res.status(500).json({ message: e })
-          },
-        )
+      try {
+        return Room.create({ playerOneUsername: username }, { transaction })
+          .then(
+            (data) => {
+              const roomId = data.dataValues.id
+
+              return History.create({ roomId, round: 1 }, { transaction })
+                .then(
+                  (history) => Room.findOne(
+                    {
+                      include: [{
+                        model: History,
+                        attributes: ['round', 'playerOneChoice', 'playerTwoChoice', 'result'],
+                        order: [['round', 'DESC']],
+                        limit: 1,
+                      }],
+                      where: { id: roomId },
+                      transaction,
+                    },
+                  ).then(
+                    (room) => {
+                      if (!room) return res.status(400).json({ message: 'Room does not exist' })
+
+                      res.status(200).json({ room })
+
+                      return transaction.commit()
+                    },
+                  ).catch(
+                    (e) => {
+                      console.log(e)
+                      res.status(500).json({ message: 'Internal Server Error' })
+
+                      return transaction.rollback()
+                    },
+                  ),
+                )
+            },
+          ).catch(
+            (e) => {
+              console.log(e)
+              res.status(500).json({ message: 'Internal Server Error' })
+
+              return transaction.rollback()
+            },
+          )
+      } catch (e) {
+        console.log(e)
+        res.status(500).json({ message: 'Internal Server Error' })
+
+        return transaction.rollback()
+      }
     }
 
     static join = async (req, res) => {
@@ -69,7 +86,7 @@ class RoomController {
               where: { id: roomId },
             },
           ).then(
-            (room) => res.status(200).json({ room }),
+            (result) => res.status(200).json({ room: result }),
           ).catch(
             (e) => {
               console.log(e)
@@ -97,10 +114,10 @@ class RoomController {
                 where: { id: roomId },
               },
             ).then(
-              (room) => {
-                if (!room) return res.status(400).json({ message: 'games does not exist' })
+              (result) => {
+                if (!result) return res.status(400).json({ message: 'Room does not exist' })
 
-                return res.status(200).json({ room })
+                return res.status(200).json({ room: result })
               },
             ).catch(
               (e) => {
@@ -111,10 +128,10 @@ class RoomController {
           ).catch(
             (e) => {
               console.log(e)
-              return res.status(500).json({ message: e })
+              return res.status(500).json({ message: 'Internal Server Error' })
             },
           )
-      } catch (error) {
+      } catch (e) {
         console.log(e)
         return res.status(500).json({ message: 'Internal Server Error' })
       }

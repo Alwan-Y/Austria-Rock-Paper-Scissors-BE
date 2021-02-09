@@ -1,10 +1,11 @@
 import admin from '../../configs/firebase'
-import { User } from '../../models'
+import { User, sequelize } from '../../models'
 
 class UserController {
     static create = async (req, res) => {
+      const transaction = await sequelize.transaction()
+
       try {
-        console.log(req.body)
         const { email, username, password } = req.body
 
         const findEmail = await User.findOne({ where: { email } })
@@ -26,7 +27,7 @@ class UserController {
         const registerusernameInDatabase = await User.create({
           email,
           username,
-        })
+        }, transaction)
 
         return res.status(200).json({ message: 'Register succes, Happy playing ~' })
       } catch (e) {
