@@ -2,8 +2,9 @@ import admin from '../../configs/firebase'
 import { User } from '../../models'
 
 class UserController {
-    static createUser = async (req, res) => {
+    static create = async (req, res) => {
       try {
+        console.log(req.body)
         const { email, username, password } = req.body
 
         const findEmail = await User.findOne({ where: { email } })

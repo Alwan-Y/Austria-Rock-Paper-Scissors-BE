@@ -3,7 +3,7 @@ import { History, sequelize } from '../../models';
 const { Op } = require('sequelize');
 
 class LeaderboardController {
-  static getLeaderboardRank = (req, res) => {
+  static get = (req, res) => {
     History.findAll({
       attributes: [
         'result',
@@ -25,7 +25,7 @@ class LeaderboardController {
         const score = data[0].dataValues.n_results;
         res.status(200).json({ username, score })
       })
-      .catch((err) => console.log(err))
+      .catch((err) => res.status(500).json({ message: 'Internal Server Error' }))
   }
 }
 

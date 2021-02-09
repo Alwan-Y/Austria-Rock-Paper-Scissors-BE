@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import { Room, History } from '../../models'
 
 class RoomController {
