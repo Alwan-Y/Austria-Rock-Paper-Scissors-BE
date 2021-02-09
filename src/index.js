@@ -18,4 +18,4 @@ app.use('/apis', apis)
 
 app.get('*', (req, res) => res.status(404).send('404 Not Found'))
 
-server.listen(process.env.PORT, () => console.log(`running on ${process.env.PORT}`))
+server.listen(3001, () => console.log(`running on ${process.env.PORT}`))
