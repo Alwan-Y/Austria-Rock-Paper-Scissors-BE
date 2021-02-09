@@ -17,7 +17,8 @@
     "db:migrate": "sequelize db:migrate",
     "db:seed:all": "sequelize db:seed:all",
     "db:migrate:refresh": "sequelize db:migrate:undo:all && yarn db:migrate",
-    "db:refresh:all": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all"
+    "db:refresh:all": "sequelize db:drop && sequelize db:create && sequelize db:migrate && sequelize db:seed:all",
+    "db:setup": "yarn sequelize db:create && yarn sequelize db:migrate && yarn sequelize db:seed:all"
   },
   "author": "Austria",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
+    "firebase-admin": "^9.4.2",
     "pg": "^8.5.0",
     "sequelize": "^6.3.5",
     "socket.io": "^3.1.1",
@@ -47,7 +49,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0"
   }
 }
