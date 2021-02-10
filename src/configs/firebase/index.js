@@ -6,4 +6,3 @@ admin.initializeApp({
 })
 
 export default admin
-
