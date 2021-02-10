@@ -10,7 +10,7 @@ import HistoryValidator from '../../validators/HistoryValidator'
 import HistoryController from '../../controllers/HistoryController'
 import StatisticController from '../../controllers/StatisticController'
 import StatisticValidator from '../../validators/StatisticValidator'
-import UserController from '../../controllers/userController'
+import UserController from '../../controllers/UserController'
 
 const router = express.Router()
 
