@@ -43,9 +43,9 @@ class UserController {
           admin: true,
         })
 
-        res.status(200).json({ message: 'Succes promote user to admin' })
+        return res.status(200).json({ message: 'Succes promote user to admin' })
       } catch (e) {
-        res.status(500).json({ message: `${e}` })
+        return res.status(500).json({ message: `${e}` })
       }
     }
 
@@ -73,9 +73,9 @@ class UserController {
           password,
         })
 
-        res.status(200).json({ message: 'Succes update password' })
+        return res.status(200).json({ message: 'Succes update password' })
       } catch (e) {
-        res.status(500).json({ message: `${e}` })
+        return res.status(500).json({ message: `${e}` })
       }
     }
 }
