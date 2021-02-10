@@ -34,5 +34,6 @@ router.get('/statistic/:username', [StatisticValidator.get, Middleware.validate]
 router.post('/user', UserController.createUser)
 router.post('/update-user', UserController.setUserToAdmin)
 router.post('/get-status', UserController.getStatusUser)
+router.post('/change-password', UserController.changePassword)
 
 export default router

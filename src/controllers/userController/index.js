@@ -62,6 +62,20 @@ class UserController {
             res.status(500).json({ message: `${e}`})
         }
     }
+
+    static changePassword = async (req, res) => {
+        try {
+            const { uid, password } = req.body
+
+            const update = await admin.auth().updateUser(uid, {
+                password: password
+            })
+
+            res.status(200).json({ message: 'Succes update password'})
+        } catch(e) {
+            res.status(500).json({ message: `${e}`})
+        }
+    }
 }
 
 export default UserController
