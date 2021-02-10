@@ -53,12 +53,11 @@ class UserController {
 
             const status = await admin.auth().getUserByEmail(email)
 
-            if ( status.customClaims.admin ) {
-                
-                return res.status(201).json({ message: 'This account is admin'})
-            }
-            
-            return res.status(200).json({ message: 'This account not admin'})
+            const getUsername = await User.findOne({ where: {email} })
+
+            const username = getUsername.username
+
+            return res.status(200).json({status, username})
         } catch(e) {
             res.status(500).json({ message: `${e}`})
         }
